@@ -20,8 +20,10 @@ import java.time.Instant;
 public class AuthCompanyUseCase {
     @Value("${security.token.secret}") // pega do application.properties
     private String secretKey;
+
     @Autowired
     private CompanyRepository companyRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 

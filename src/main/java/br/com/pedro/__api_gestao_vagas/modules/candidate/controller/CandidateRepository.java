@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface CandidateRepository extends JpaRepository<CandidateEntity, UUID> {
     // spring faz o méthodo automaticamente só pelo nome dele. Caso ache o usuario retorna um candidato. Senão, retorna nulo
     Optional<CandidateEntity> findByUsernameOrEmail(String username, String email);
+    Optional<CandidateEntity> findByUsername(String username);
 }
