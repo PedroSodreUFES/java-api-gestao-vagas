@@ -50,7 +50,7 @@ public class AuthCandidateUseCase {
         String token = JWT.create()
                 .withIssuer("Pedro Sodré LTDA") // coloca meu nome como issuer
                 .withSubject(candidate.getId().toString()) // assina com o id do usuário
-                .withClaim("roles", Arrays.asList("candidate"))
+                .withClaim("roles", Arrays.asList("CANDIDATE"))
                 .withExpiresAt(expiresIn) // dura 2 horas
                 .sign(algorithm); // assina o token
 

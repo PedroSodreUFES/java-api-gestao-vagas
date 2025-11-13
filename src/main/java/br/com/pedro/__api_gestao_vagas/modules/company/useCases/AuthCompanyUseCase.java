@@ -1,6 +1,7 @@
 package br.com.pedro.__api_gestao_vagas.modules.company.useCases;
 
 import br.com.pedro.__api_gestao_vagas.modules.company.dto.AuthCompanyDTO;
+import br.com.pedro.__api_gestao_vagas.modules.company.dto.AuthCompanyResponseDTO;
 import br.com.pedro.__api_gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.pedro.__api_gestao_vagas.modules.company.repositories.CompanyRepository;
 import com.auth0.jwt.JWT;
@@ -15,6 +16,7 @@ import javax.naming.AuthenticationException;
 import javax.swing.*;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 
 @Service
 public class AuthCompanyUseCase {
@@ -27,7 +29,7 @@ public class AuthCompanyUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+    public AuthCompanyResponseDTO execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
         // ve se a company existe
         CompanyEntity company = this.companyRepository.findByUsername(authCompanyDTO.getUsername()).orElseThrow(
                 () -> {
@@ -43,12 +45,18 @@ public class AuthCompanyUseCase {
         }
 
         // Se forem iguais, fazer o token
+        var expiresIn = Instant.now().plus(Duration.ofHours(2));
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
         var token = JWT.create().withIssuer("Pedro Sodré LTDA") // Coloca sodrézin vapo vapo como issuer
-                .withExpiresAt(Instant.now().plus(Duration.ofHours(1))) // expira em 1 hora e coloca o campo exp no token
+                .withExpiresAt(expiresIn) // expira em 1 hora e coloca o campo exp no token
                 .withSubject(company.getId().toString()) // coloca o sub com o id da company
+                .withClaim("roles", Arrays.asList("COMPANY"))
                 .sign(algorithm); // algoritmo HMAC256
 
-        return token;
+        return AuthCompanyResponseDTO.builder()
+                .expiresIn(expiresIn.toEpochMilli())
+                .accessToken(token)
+                .build();
     }
 }
