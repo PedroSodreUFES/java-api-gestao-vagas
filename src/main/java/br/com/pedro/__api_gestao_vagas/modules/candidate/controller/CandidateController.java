@@ -29,7 +29,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
-@Tag(name = "Candidato", description = "Informações do candidato.")
+@Tag(name = "Candidato", description = "Rotas relacionadas ao candidato.")
 public class CandidateController {
 
     @Autowired
