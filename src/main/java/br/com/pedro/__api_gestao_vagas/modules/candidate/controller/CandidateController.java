@@ -45,7 +45,7 @@ public class CandidateController {
     @Operation(summary = "Cadastro de candidato.", description = "Esse endpoint é responsável por cadastrar um candidato.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", content = {
-                    @Content(array = @ArraySchema(schema = @Schema(implementation = CandidateEntity.class)))
+                    @Content(schema = @Schema(implementation = CandidateEntity.class))
             }),
             @ApiResponse(responseCode = "400", description = "Usuário já existe!")
     })
