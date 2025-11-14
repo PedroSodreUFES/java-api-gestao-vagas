@@ -70,7 +70,7 @@ public class CreateJobControllerTest {
     }
 
     @Test
-    @DisplayName("Should not be able to create a job withou a registered company.")
+    @DisplayName("Should not be able to create a job without a registered company.")
     public void error_company_not_found() throws Exception {
         CreateJobDTO createJobDTO = CreateJobDTO.builder()
                 .benefits("BENEFITS_TEST")
