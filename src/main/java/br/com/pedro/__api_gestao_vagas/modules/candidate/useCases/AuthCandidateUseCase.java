@@ -1,7 +1,7 @@
 package br.com.pedro.__api_gestao_vagas.modules.candidate.useCases;
 
-import br.com.pedro.__api_gestao_vagas.modules.candidate.CandidateEntity;
-import br.com.pedro.__api_gestao_vagas.modules.candidate.controller.CandidateRepository;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.entity.CandidateEntity;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.repository.CandidateRepository;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import com.auth0.jwt.JWT;

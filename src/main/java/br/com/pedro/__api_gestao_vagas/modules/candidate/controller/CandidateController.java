@@ -1,8 +1,12 @@
 package br.com.pedro.__api_gestao_vagas.modules.candidate.controller;
 
+import br.com.pedro.__api_gestao_vagas.exceptions.JobNotFound;
 import br.com.pedro.__api_gestao_vagas.exceptions.UserFoundException;
-import br.com.pedro.__api_gestao_vagas.modules.candidate.CandidateEntity;
+import br.com.pedro.__api_gestao_vagas.exceptions.UserNotFound;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.entity.ApplyJobEntity;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.entity.CandidateEntity;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.useCases.ApplyJobCandidateUseCase;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
@@ -40,6 +44,9 @@ public class CandidateController {
 
     @Autowired
     private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
+
+    @Autowired
+    private ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
     @PostMapping()
     @Operation(summary = "Cadastro de candidato.", description = "Esse endpoint é responsável por cadastrar um candidato.")
@@ -91,5 +98,20 @@ public class CandidateController {
     public ResponseEntity<Object> getJobs(@RequestParam String filter){
         List<JobEntity> jobs = this.listAllJobsByFilterUseCase.execute(filter);
         return ResponseEntity.ok(jobs);
+    }
+
+    @PostMapping("/job/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Candidatar para uma vaga.", description = "Esse endpoint é responsável por fazer a candidatura de um candidato para uma vaga.")
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> applyToJob(HttpServletRequest request, @RequestBody UUID  jobId){
+        String candidateId = request.getAttribute("candidate_id").toString();
+        try{
+            ApplyJobEntity applyJobEntity = this.applyJobCandidateUseCase
+                    .execute(UUID.fromString(candidateId), jobId);
+            return ResponseEntity.ok(applyJobEntity);
+        } catch (JobNotFound | UserNotFound ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

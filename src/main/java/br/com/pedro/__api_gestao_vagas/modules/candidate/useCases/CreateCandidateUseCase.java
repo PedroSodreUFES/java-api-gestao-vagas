@@ -1,8 +1,8 @@
 package br.com.pedro.__api_gestao_vagas.modules.candidate.useCases;
 
 import br.com.pedro.__api_gestao_vagas.exceptions.UserFoundException;
-import br.com.pedro.__api_gestao_vagas.modules.candidate.CandidateEntity;
-import br.com.pedro.__api_gestao_vagas.modules.candidate.controller.CandidateRepository;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.entity.CandidateEntity;
+import br.com.pedro.__api_gestao_vagas.modules.candidate.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

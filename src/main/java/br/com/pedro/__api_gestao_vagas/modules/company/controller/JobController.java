@@ -1,5 +1,6 @@
 package br.com.pedro.__api_gestao_vagas.modules.company.controller;
 
+import br.com.pedro.__api_gestao_vagas.exceptions.CompanyNotFound;
 import br.com.pedro.__api_gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.pedro.__api_gestao_vagas.modules.company.entities.JobEntity;
 import br.com.pedro.__api_gestao_vagas.modules.company.useCases.CreateJobUseCase;
@@ -40,17 +41,21 @@ public class JobController {
         // pega do header o company id e usa
         var companyId = request.getAttribute("company_id");
 
-        // Transforma o DTO em job Entity
-        JobEntity jobEntity = JobEntity.builder()
-                .benefits(createJobDTO.getBenefits())
-                .companyId(UUID.fromString(companyId.toString()))
-                .description(createJobDTO.getDescription())
-                .level(createJobDTO.getLevel())
-                .build();
+        try {
+            // Transforma o DTO em job Entity
+            JobEntity jobEntity = JobEntity.builder()
+                    .benefits(createJobDTO.getBenefits())
+                    .companyId(UUID.fromString(companyId.toString()))
+                    .description(createJobDTO.getDescription())
+                    .level(createJobDTO.getLevel())
+                    .build();
 
-        // Roda caso de uso
-        JobEntity job = createJobUseCase.execute(jobEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(job);
+            // Executa
+            JobEntity job = createJobUseCase.execute(jobEntity);
+            return ResponseEntity.status(HttpStatus.CREATED).body(job);
+        } catch (CompanyNotFound ex) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 }
 
