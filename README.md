@@ -1,5 +1,5 @@
 # Api Java de gestão de vagas
-### Tecnologias
+## Tecnologias
 + PostgreSQL - Banco de dados SQL.
 + H2 - Banco de dados In-Memory
 + Spring Actuator - Monitoramento.
@@ -19,5 +19,10 @@
 + JUNIT - Testes.
 + Jacoco - Qualidade de código.
 + Sonar - Qualidade de código.
-### Créditos
+## Como rodar a aplicação
+```bash
+docker-compose up -d
+mvn spring:boot:run
+```
+## Créditos
 > Pedro Sodré Malini, 9 de Novembro de 2025
