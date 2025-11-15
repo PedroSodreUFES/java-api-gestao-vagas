@@ -20,6 +20,11 @@
 + Jacoco - Qualidade de código.
 + Sonar - Qualidade de código.
 ## Como rodar a aplicação
+### Substituir em src/resources/application.properties as seguintes linhas
+spring.datasource.url=jdbc:postgresql://localhost:5432/gestao_vagas<br />
+spring.datasource.username=admin<br/>
+spring.datasource.password=admin
+### Rodar no terminal
 ```bash
 docker-compose up -d
 mvn spring:boot:run
