@@ -7,7 +7,6 @@ COPY . .
 RUN apt-get install maven -y
 RUN mvn clean install -DskipTests
 
-# Imagem oficial atual do OpenJDK (Eclipse Temurin)
 FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
