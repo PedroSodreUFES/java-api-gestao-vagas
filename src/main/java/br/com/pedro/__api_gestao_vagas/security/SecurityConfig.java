@@ -20,10 +20,11 @@ public class SecurityConfig {
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
 
-    private static final String[] SWAGGER_LIST = {
+    private static final String[] PERMIT_ALL_LIST = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resource/**",
+            "/actuator/**"
     };
 
     @Bean // indica que o metod dentro da classe define um objeto já gerenciado pelo Spring -> configura a segurança
@@ -34,7 +35,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/company").permitAll();
                     auth.requestMatchers("/company/auth").permitAll();
                     auth.requestMatchers("/candidate/auth").permitAll();
-                    auth.requestMatchers(SWAGGER_LIST).permitAll();
+                    auth.requestMatchers(PERMIT_ALL_LIST).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class)

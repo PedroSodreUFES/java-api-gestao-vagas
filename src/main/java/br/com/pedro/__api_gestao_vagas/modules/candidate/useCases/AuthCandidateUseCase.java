@@ -1,5 +1,6 @@
 package br.com.pedro.__api_gestao_vagas.modules.candidate.useCases;
 
+import br.com.pedro.__api_gestao_vagas.exceptions.UserNotFound;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.entity.CandidateEntity;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.repository.CandidateRepository;
 import br.com.pedro.__api_gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
@@ -8,7 +9,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class AuthCandidateUseCase {
         // Vê se o candidato existe
         CandidateEntity candidate = this.candidateRepository.findByUsername(authCandidateRequestDTO.username())
                 .orElseThrow(() -> {
-                    throw new UsernameNotFoundException("Invalid credentials.");
+                    throw new UserNotFound();
         });
 
         // Vê se as senhas batem
