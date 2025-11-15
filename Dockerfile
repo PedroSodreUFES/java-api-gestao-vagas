@@ -12,4 +12,4 @@ EXPOSE 8080
 
 COPY --from=build /target/05-api-gestao-vagas-0.0.1.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
