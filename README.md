@@ -28,7 +28,7 @@ spring.datasource.password=admin
 É preciso ter o Docker instalado*
 ```bash
 docker-compose up -d
-mvn spring:boot:run
+mvn spring-boot:run
 ```
 ## Créditos
 > Pedro Sodré Malini, 9 de Novembro de 2025
