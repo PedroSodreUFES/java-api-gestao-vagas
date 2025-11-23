@@ -46,17 +46,19 @@ public class AuthCandidateUseCase {
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         var expiresIn = Instant.now().plus(Duration.ofHours(2));
+        var roles = Arrays.asList("CANDIDATE");
 
         String token = JWT.create()
                 .withIssuer("Pedro Sodré LTDA") // coloca meu nome como issuer
                 .withSubject(candidate.getId().toString()) // assina com o id do usuário
-                .withClaim("roles", Arrays.asList("CANDIDATE"))
+                .withClaim("roles", roles)
                 .withExpiresAt(expiresIn) // dura 2 horas
                 .sign(algorithm); // assina o token
 
         return AuthCandidateResponseDTO.builder()
                 .accessToken(token)
                 .expires_in(expiresIn.toEpochMilli())
+                .roles(roles)
                 .build();
     }
 }

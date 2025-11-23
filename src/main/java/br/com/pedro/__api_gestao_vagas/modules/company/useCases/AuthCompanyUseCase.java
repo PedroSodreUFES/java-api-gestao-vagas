@@ -45,18 +45,20 @@ public class AuthCompanyUseCase {
         }
 
         // Se forem iguais, fazer o token
+        var roles = Arrays.asList("COMPANY");
         var expiresIn = Instant.now().plus(Duration.ofHours(2));
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         var token = JWT.create().withIssuer("Pedro Sodré LTDA") // Coloca sodrézin vapo vapo como issuer
                 .withExpiresAt(expiresIn) // expira em 1 hora e coloca o campo exp no token
                 .withSubject(company.getId().toString()) // coloca o sub com o id da company
-                .withClaim("roles", Arrays.asList("COMPANY"))
+                .withClaim("roles", roles)
                 .sign(algorithm); // algoritmo HMAC256
 
         return AuthCompanyResponseDTO.builder()
                 .expiresIn(expiresIn.toEpochMilli())
                 .accessToken(token)
+                .roles(roles)
                 .build();
     }
 }

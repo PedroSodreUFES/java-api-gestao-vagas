@@ -4,6 +4,7 @@ import br.com.pedro.__api_gestao_vagas.exceptions.CompanyNotFound;
 import br.com.pedro.__api_gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.pedro.__api_gestao_vagas.modules.company.entities.JobEntity;
 import br.com.pedro.__api_gestao_vagas.modules.company.useCases.CreateJobUseCase;
+import br.com.pedro.__api_gestao_vagas.modules.company.useCases.ListAllJobsByCompanyIdUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController()
@@ -30,8 +32,12 @@ public class JobController {
     @Autowired
     private CreateJobUseCase createJobUseCase;
 
+    @Autowired
+    private ListAllJobsByCompanyIdUseCase listAllJobsByCompanyIdUseCase;
+
     @PostMapping()
     @PreAuthorize("hasRole('COMPANY')")
+    @Tag(name = "Vagas", description = "Informações das vagas")
     @Operation(summary = "Cadastro de vagas.", description = "Esse endpoint é responsável por cadastrar as vagas de uma empresa.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = JobEntity.class))})
@@ -56,6 +62,20 @@ public class JobController {
         } catch (CompanyNotFound ex) {
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
+    }
+
+    @GetMapping()
+    @PreAuthorize("hasRole('COMPANY')")
+    @Tag(name = "Vagas", description = "Informações das vagas")
+    @Operation(summary = "Recupera vagas de uma empresa.", description = "Esse endpoint é responsável por listar as vagas de uma empresa.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))})
+    })
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<List<JobEntity>> listByCompanyId(HttpServletRequest request){
+        String companyId = request.getAttribute("company_id").toString();
+        List<JobEntity> jobs = this.listAllJobsByCompanyIdUseCase.execute(UUID.fromString(companyId));
+        return ResponseEntity.ok(jobs);
     }
 }
 
